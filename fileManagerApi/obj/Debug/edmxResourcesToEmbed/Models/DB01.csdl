@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="files">
+    <Key>
+      <PropertyRef Name="fileId" />
+    </Key>
+    <Property Name="fileId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="fileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fileUpploadTime" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="fileType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="inFolderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fileUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fileOwnerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fileDownloadCount" Type="Int32" />
+    <NavigationProperty Name="folders" Relationship="Self.FK_files_ToFolder" FromRole="files" ToRole="folders" />
+    <NavigationProperty Name="users" Relationship="Self.FK_files_ToUser" FromRole="files" ToRole="users" />
+  </EntityType>
+  <EntityType Name="folders">
+    <Key>
+      <PropertyRef Name="folderId" />
+    </Key>
+    <Property Name="folderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="folderOwnerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="folderName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="folderCreateTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="folderGroupLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="files" Relationship="Self.FK_files_ToFolder" FromRole="folders" ToRole="files" />
+    <NavigationProperty Name="users" Relationship="Self.FK_folders_ToUsers" FromRole="folders" ToRole="users" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="userMail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="userGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="userPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="userProfilImg" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="files" Relationship="Self.FK_files_ToUser" FromRole="users" ToRole="files" />
+    <NavigationProperty Name="folders" Relationship="Self.FK_folders_ToUsers" FromRole="users" ToRole="folders" />
+  </EntityType>
+  <Association Name="FK_files_ToFolder">
+    <End Role="folders" Type="Self.folders" Multiplicity="0..1" />
+    <End Role="files" Type="Self.files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="folders">
+        <PropertyRef Name="folderId" />
+      </Principal>
+      <Dependent Role="files">
+        <PropertyRef Name="inFolderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_files_ToUser">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="files" Type="Self.files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="files">
+        <PropertyRef Name="fileOwnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_folders_ToUsers">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="folders" Type="Self.folders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="folders">
+        <PropertyRef Name="folderOwnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DB01Entities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="files" EntityType="Self.files" />
+    <EntitySet Name="folders" EntityType="Self.folders" />
+    <EntitySet Name="users" EntityType="Self.users" />
+    <AssociationSet Name="FK_files_ToFolder" Association="Self.FK_files_ToFolder">
+      <End Role="folders" EntitySet="folders" />
+      <End Role="files" EntitySet="files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_files_ToUser" Association="Self.FK_files_ToUser">
+      <End Role="users" EntitySet="users" />
+      <End Role="files" EntitySet="files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_folders_ToUsers" Association="Self.FK_folders_ToUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="folders" EntitySet="folders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

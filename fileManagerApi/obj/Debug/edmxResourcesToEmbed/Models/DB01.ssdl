@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB01Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="files">
+    <Key>
+      <PropertyRef Name="fileId" />
+    </Key>
+    <Property Name="fileId" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="fileName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileUpploadTime" Type="nchar" MaxLength="10" />
+    <Property Name="fileType" Type="nvarchar" MaxLength="10" />
+    <Property Name="inFolderId" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileUrl" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileOwnerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileDownloadCount" Type="int" />
+  </EntityType>
+  <EntityType Name="folders">
+    <Key>
+      <PropertyRef Name="folderId" />
+    </Key>
+    <Property Name="folderId" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="folderOwnerId" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="folderName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="folderCreateTime" Type="nvarchar" MaxLength="50" />
+    <Property Name="folderFileCount" Type="int" />
+    <Property Name="folderGroupLevel" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="userName" Type="nvarchar" MaxLength="50" />
+    <Property Name="userMail" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="userGroup" Type="nvarchar" MaxLength="50" />
+    <Property Name="userPassword" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="userProfilImg" Type="image" />
+  </EntityType>
+  <Association Name="FK_files_ToFolder">
+    <End Role="folders" Type="Self.folders" Multiplicity="0..1" />
+    <End Role="files" Type="Self.files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="folders">
+        <PropertyRef Name="folderId" />
+      </Principal>
+      <Dependent Role="files">
+        <PropertyRef Name="inFolderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_files_ToUser">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="files" Type="Self.files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="files">
+        <PropertyRef Name="fileOwnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_folders_ToUsers">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="folders" Type="Self.folders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="folders">
+        <PropertyRef Name="folderOwnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DB01ModelStoreContainer">
+    <EntitySet Name="files" EntityType="Self.files" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="folders" EntityType="Self.folders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_files_ToFolder" Association="Self.FK_files_ToFolder">
+      <End Role="folders" EntitySet="folders" />
+      <End Role="files" EntitySet="files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_files_ToUser" Association="Self.FK_files_ToUser">
+      <End Role="users" EntitySet="users" />
+      <End Role="files" EntitySet="files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_folders_ToUsers" Association="Self.FK_folders_ToUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="folders" EntitySet="folders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

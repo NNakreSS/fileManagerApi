@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DB01ModelStoreContainer" CdmEntityContainer="DB01Entities2">
+    <EntitySetMapping Name="files">
+      <EntityTypeMapping TypeName="DB01Model.files">
+        <MappingFragment StoreEntitySet="files">
+          <ScalarProperty Name="fileId" ColumnName="fileId" />
+          <ScalarProperty Name="fileName" ColumnName="fileName" />
+          <ScalarProperty Name="fileUpploadTime" ColumnName="fileUpploadTime" />
+          <ScalarProperty Name="fileType" ColumnName="fileType" />
+          <ScalarProperty Name="inFolderId" ColumnName="inFolderId" />
+          <ScalarProperty Name="fileUrl" ColumnName="fileUrl" />
+          <ScalarProperty Name="fileOwnerId" ColumnName="fileOwnerId" />
+          <ScalarProperty Name="fileDownloadCount" ColumnName="fileDownloadCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="folders">
+      <EntityTypeMapping TypeName="DB01Model.folders">
+        <MappingFragment StoreEntitySet="folders">
+          <ScalarProperty Name="folderId" ColumnName="folderId" />
+          <ScalarProperty Name="folderOwnerId" ColumnName="folderOwnerId" />
+          <ScalarProperty Name="folderName" ColumnName="folderName" />
+          <ScalarProperty Name="folderCreateTime" ColumnName="folderCreateTime" />
+          <ScalarProperty Name="folderGroupLevel" ColumnName="folderGroupLevel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="DB01Model.users">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="userMail" ColumnName="userMail" />
+          <ScalarProperty Name="userGroup" ColumnName="userGroup" />
+          <ScalarProperty Name="userPassword" ColumnName="userPassword" />
+          <ScalarProperty Name="userProfilImg" ColumnName="userProfilImg" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

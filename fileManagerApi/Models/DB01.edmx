@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DB01Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="files">
+          <Key>
+            <PropertyRef Name="fileId" />
+          </Key>
+          <Property Name="fileId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="fileName" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileUpploadTime" Type="nchar" MaxLength="10" />
+          <Property Name="fileType" Type="nvarchar" MaxLength="10" />
+          <Property Name="inFolderId" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileUrl" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileOwnerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileDownloadCount" Type="int" />
+        </EntityType>
+        <EntityType Name="folders">
+          <Key>
+            <PropertyRef Name="folderId" />
+          </Key>
+          <Property Name="folderId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="folderOwnerId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="folderName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="folderCreateTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="folderFileCount" Type="int" />
+          <Property Name="folderGroupLevel" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="userName" Type="nvarchar" MaxLength="50" />
+          <Property Name="userMail" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="userGroup" Type="nvarchar" MaxLength="50" />
+          <Property Name="userPassword" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="userProfilImg" Type="image" />
+        </EntityType>
+        <Association Name="FK_files_ToFolder">
+          <End Role="folders" Type="Self.folders" Multiplicity="0..1" />
+          <End Role="files" Type="Self.files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="folders">
+              <PropertyRef Name="folderId" />
+            </Principal>
+            <Dependent Role="files">
+              <PropertyRef Name="inFolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_files_ToUser">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="files" Type="Self.files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="files">
+              <PropertyRef Name="fileOwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_folders_ToUsers">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="folders" Type="Self.folders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="folders">
+              <PropertyRef Name="folderOwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB01ModelStoreContainer">
+          <EntitySet Name="files" EntityType="Self.files" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="folders" EntityType="Self.folders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_files_ToFolder" Association="Self.FK_files_ToFolder">
+            <End Role="folders" EntitySet="folders" />
+            <End Role="files" EntitySet="files" />
+          </AssociationSet>
+          <AssociationSet Name="FK_files_ToUser" Association="Self.FK_files_ToUser">
+            <End Role="users" EntitySet="users" />
+            <End Role="files" EntitySet="files" />
+          </AssociationSet>
+          <AssociationSet Name="FK_folders_ToUsers" Association="Self.FK_folders_ToUsers">
+            <End Role="users" EntitySet="users" />
+            <End Role="folders" EntitySet="folders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="files">
+          <Key>
+            <PropertyRef Name="fileId" />
+          </Key>
+          <Property Name="fileId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileUpploadTime" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="fileType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="inFolderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileOwnerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileDownloadCount" Type="Int32" />
+          <NavigationProperty Name="folders" Relationship="Self.FK_files_ToFolder" FromRole="files" ToRole="folders" />
+          <NavigationProperty Name="users" Relationship="Self.FK_files_ToUser" FromRole="files" ToRole="users" />
+        </EntityType>
+        <EntityType Name="folders">
+          <Key>
+            <PropertyRef Name="folderId" />
+          </Key>
+          <Property Name="folderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="folderOwnerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="folderName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="folderCreateTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="folderGroupLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="files" Relationship="Self.FK_files_ToFolder" FromRole="folders" ToRole="files" />
+          <NavigationProperty Name="users" Relationship="Self.FK_folders_ToUsers" FromRole="folders" ToRole="users" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userMail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userProfilImg" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="files" Relationship="Self.FK_files_ToUser" FromRole="users" ToRole="files" />
+          <NavigationProperty Name="folders" Relationship="Self.FK_folders_ToUsers" FromRole="users" ToRole="folders" />
+        </EntityType>
+        <Association Name="FK_files_ToFolder">
+          <End Role="folders" Type="Self.folders" Multiplicity="0..1" />
+          <End Role="files" Type="Self.files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="folders">
+              <PropertyRef Name="folderId" />
+            </Principal>
+            <Dependent Role="files">
+              <PropertyRef Name="inFolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_files_ToUser">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="files" Type="Self.files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="files">
+              <PropertyRef Name="fileOwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_folders_ToUsers">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="folders" Type="Self.folders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="folders">
+              <PropertyRef Name="folderOwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB01Entities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="files" EntityType="Self.files" />
+          <EntitySet Name="folders" EntityType="Self.folders" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <AssociationSet Name="FK_files_ToFolder" Association="Self.FK_files_ToFolder">
+            <End Role="folders" EntitySet="folders" />
+            <End Role="files" EntitySet="files" />
+          </AssociationSet>
+          <AssociationSet Name="FK_files_ToUser" Association="Self.FK_files_ToUser">
+            <End Role="users" EntitySet="users" />
+            <End Role="files" EntitySet="files" />
+          </AssociationSet>
+          <AssociationSet Name="FK_folders_ToUsers" Association="Self.FK_folders_ToUsers">
+            <End Role="users" EntitySet="users" />
+            <End Role="folders" EntitySet="folders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DB01ModelStoreContainer" CdmEntityContainer="DB01Entities2">
+          <EntitySetMapping Name="files">
+            <EntityTypeMapping TypeName="DB01Model.files">
+              <MappingFragment StoreEntitySet="files">
+                <ScalarProperty Name="fileId" ColumnName="fileId" />
+                <ScalarProperty Name="fileName" ColumnName="fileName" />
+                <ScalarProperty Name="fileUpploadTime" ColumnName="fileUpploadTime" />
+                <ScalarProperty Name="fileType" ColumnName="fileType" />
+                <ScalarProperty Name="inFolderId" ColumnName="inFolderId" />
+                <ScalarProperty Name="fileUrl" ColumnName="fileUrl" />
+                <ScalarProperty Name="fileOwnerId" ColumnName="fileOwnerId" />
+                <ScalarProperty Name="fileDownloadCount" ColumnName="fileDownloadCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="folders">
+            <EntityTypeMapping TypeName="DB01Model.folders">
+              <MappingFragment StoreEntitySet="folders">
+                <ScalarProperty Name="folderId" ColumnName="folderId" />
+                <ScalarProperty Name="folderOwnerId" ColumnName="folderOwnerId" />
+                <ScalarProperty Name="folderName" ColumnName="folderName" />
+                <ScalarProperty Name="folderCreateTime" ColumnName="folderCreateTime" />
+                <ScalarProperty Name="folderGroupLevel" ColumnName="folderGroupLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="DB01Model.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="userMail" ColumnName="userMail" />
+                <ScalarProperty Name="userGroup" ColumnName="userGroup" />
+                <ScalarProperty Name="userPassword" ColumnName="userPassword" />
+                <ScalarProperty Name="userProfilImg" ColumnName="userProfilImg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
